@@ -14,6 +14,7 @@ namespace ex43
             const string CommandRemoveBook = "2";
             const string CommandShowAllBooks = "3";
             const string CommandFindBookByParameter = "4";
+            const string CommandExit = "5";
 
             Library library = new Library();
             bool isOpen = true;
@@ -45,6 +46,10 @@ namespace ex43
                         library.FindBookByParameter();
                         break;
 
+                    case CommandExit:
+                        isOpen = false;
+                        break;
+
                     default:
                         Console.WriteLine("Неккоректный ввод...");
                         break;
@@ -52,7 +57,6 @@ namespace ex43
 
                 Console.ReadKey();
                 Console.Clear();
-
             }
         }
     }
@@ -93,7 +97,6 @@ namespace ex43
                     book.ShowInfo();
                     Console.WriteLine();
                 }
-
             }
             else
             {
@@ -116,11 +119,13 @@ namespace ex43
             const string CommandFindByName = "1";
             const string CommandFindByAuthor = "2";
             const string CommandFindByYear = "3";
+            const string CommandGetBack = "4";
 
             Console.Write($"{CommandFindByName} - найти по названию\n" +
                 $"{CommandFindByAuthor} - найти по автору\n" +
-                $"{CommandFindByYear} - найти по дате релиза\n\n" +
-                $"Ваш ввод: ");
+                $"{CommandFindByYear} - найти по дате релиза\n" +
+                $"{CommandGetBack} - вернуться назад\n" +
+                $"\nВаш ввод: ");
 
             switch (Console.ReadLine())
             {
@@ -144,14 +149,32 @@ namespace ex43
 
                     foreach (var book in _books)
                     {
-                        if (nameOfBook == book.Name)
+                        if (nameOfAuthor == book.Author)
                         {
                             book.ShowInfo();
                         }
                     }
+
                     break;
 
                 case CommandFindByYear:
+                    Console.Write("Введите год выпуска: ");
+
+                    if (int.TryParse(Console.ReadLine(), out int releaseYear))
+                    {
+                        foreach (var book in _books)
+                        {
+                            if (releaseYear == book.Year)
+                            {
+                                book.ShowInfo();
+                            }
+                        }
+                    }
+
+                    break;
+
+                case CommandGetBack:
+                    Console.WriteLine("Возвращаемся назад...");
                     break;
 
                 default:
@@ -190,23 +213,22 @@ namespace ex43
 
     class Book
     {
-        private int _bookId;
-
         public Book(int bookId, string name, string author, int year)
         {
-            _bookId = bookId;
+            BookId = bookId;
             Name = name;
             Author = author;
             Year = year;
         }
 
+        public int BookId { get; private set; }
         public string Name { get; private set; }
         public string Author { get; private set; }
         public int Year { get; private set; }
 
         public void ShowInfo()
         {
-            Console.WriteLine($"{_bookId}. Название книги: '{Name}'\nАвтор: {Author}\nГод выпуска: {Year} год");
+            Console.WriteLine($"{BookId}. Название книги: '{Name}'\nАвтор: {Author}\nГод выпуска: {Year} год");
         }
     }
 }
