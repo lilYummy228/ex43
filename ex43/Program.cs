@@ -13,31 +13,45 @@ namespace ex43
             const string CommandAddBook = "1";
             const string CommandRemoveBook = "2";
             const string CommandShowAllBooks = "3";
-            const string CommandShowBookByParameter = "4";
+            const string CommandFindBookByParameter = "4";
 
-            Console.Write($"Библиотека\n" +
-                $"{CommandAddBook} - добавить книгу\n" +
-                $"{CommandRemoveBook} - убрать книгу\n" +
-                $"{CommandShowAllBooks} - показать все книги\n" +
-                $"{CommandShowBookByParameter} - показать книгу по параметру\n");
+            Library library = new Library();
+            bool isOpen = true;
 
-            switch (Console.ReadLine())
+            while (isOpen)
             {
-                case CommandAddBook:
-                    break;
+                Console.Write($"Библиотека\n" +
+                    $"{CommandAddBook} - добавить книгу\n" +
+                    $"{CommandRemoveBook} - убрать книгу\n" +
+                    $"{CommandShowAllBooks} - показать все книги\n" +
+                    $"{CommandFindBookByParameter} - показать книгу по параметру\n\n" +
+                    $"Ваш ввод: ");
 
-                case CommandRemoveBook:
-                    break;
+                switch (Console.ReadLine())
+                {
+                    case CommandAddBook:
+                        library.AddBook();
+                        break;
 
-                case CommandShowAllBooks:
-                    break;
+                    case CommandRemoveBook:
+                        library.RemoveBook();
+                        break;
 
-                case CommandShowBookByParameter:
-                    break;
+                    case CommandShowAllBooks:
+                        library.ShowAllBooks();
+                        break;
 
-                default:
-                    Console.WriteLine("Неккоректный ввод...");
-                    break;
+                    case CommandFindBookByParameter:
+                        break;
+
+                    default:
+                        Console.WriteLine("Неккоректный ввод...");
+                        break;
+                }
+
+                Console.ReadKey();
+                Console.Clear();
+
             }
         }
     }
@@ -48,21 +62,101 @@ namespace ex43
 
         public void AddBook()
         {
+            int bookId = _books.Count + 1;
 
+            Console.Write("Введите название книги: ");
+            string bookName = Console.ReadLine().ToUpper();
+
+            Console.Write("Введите автора книги: ");
+            string authorName = Console.ReadLine().ToUpper();
+
+            Console.Write("Введите год выпуска книги: ");
+
+            if (int.TryParse(Console.ReadLine(), out int releaseYear))
+            {
+                _books.Add(new Book(bookId, bookName, authorName, releaseYear));
+                Console.WriteLine($"Книга '{bookName}' успешно добавлена...");
+            }
+            else
+            {
+                Console.WriteLine("Неккоректный ввод...");
+            }            
+        }
+
+        public void ShowAllBooks()
+        {
+            if (_books.Count > 0)
+            {
+                foreach (var book in _books)
+                {
+                    book.ShowInfo();
+                    Console.WriteLine();
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Библиотека пуста...");
+            }
+        }
+
+        public void RemoveBook()
+        {
+            ShowAllBooks();
+
+            if (TryGetBook(out Book book))
+            {
+                _books.Remove(book);
+            }
+        }
+
+        private bool TryGetBook(out Book book)
+        {
+            Console.Write("Введите номер удаляемой книги: ");
+
+            if (int.TryParse(Console.ReadLine(), out int bookId))
+            {
+                if (bookId > 0 && bookId - 1 < _books.Count)
+                {
+                    book = _books[bookId - 1];
+                    Console.WriteLine($"Книга под номером {bookId} успешно удалена...");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Книга с таким номером отсутствует...");
+                    book = null;
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Неккоректный ввод...");
+                book = null;
+                return false;
+            }
         }
     }
 
     class Book
     {
-        private string _name;
-        private string _author;
-        private int _year;
+        private int _bookId;
 
-        public Book(string name, string author, int year)
+        public Book(int bookId, string name, string author, int year)
         {
-            _name = name;
-            _author = author;
-            _year = year;
+            _bookId = bookId;
+            Name = name;
+            Author = author;
+            Year = year;
+        }
+
+        public string Name { get; private set; }
+        public string Author { get; private set; }
+        public int Year { get; private set; }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{_bookId}. Название книги: '{Name}'\nАвтор: {Author}\nГод выпуска: {Year} год");
         }
     }
 }
