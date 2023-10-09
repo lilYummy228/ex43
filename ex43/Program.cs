@@ -42,6 +42,7 @@ namespace ex43
                         break;
 
                     case CommandFindBookByParameter:
+                        library.FindBookByParameter();
                         break;
 
                     default:
@@ -80,7 +81,7 @@ namespace ex43
             else
             {
                 Console.WriteLine("Неккоректный ввод...");
-            }            
+            }
         }
 
         public void ShowAllBooks()
@@ -107,6 +108,55 @@ namespace ex43
             if (TryGetBook(out Book book))
             {
                 _books.Remove(book);
+            }
+        }
+
+        public void FindBookByParameter()
+        {
+            const string CommandFindByName = "1";
+            const string CommandFindByAuthor = "2";
+            const string CommandFindByYear = "3";
+
+            Console.Write($"{CommandFindByName} - найти по названию\n" +
+                $"{CommandFindByAuthor} - найти по автору\n" +
+                $"{CommandFindByYear} - найти по дате релиза\n\n" +
+                $"Ваш ввод: ");
+
+            switch (Console.ReadLine())
+            {
+                case CommandFindByName:
+                    Console.Write("Введите название книги: ");
+                    string nameOfBook = Console.ReadLine().ToUpper();
+
+                    foreach (var book in _books)
+                    {
+                        if (nameOfBook == book.Name)
+                        {
+                            book.ShowInfo();
+                        }
+                    }
+
+                    break;
+
+                case CommandFindByAuthor:
+                    Console.Write("Введите автора: ");
+                    string nameOfAuthor = Console.ReadLine().ToUpper();
+
+                    foreach (var book in _books)
+                    {
+                        if (nameOfBook == book.Name)
+                        {
+                            book.ShowInfo();
+                        }
+                    }
+                    break;
+
+                case CommandFindByYear:
+                    break;
+
+                default:
+                    Console.WriteLine("Неккоректный ввод...");
+                    break;
             }
         }
 
