@@ -105,7 +105,7 @@ namespace ex43
         {
             ShowAllBooks();
 
-            if (FindBookById(out Book book))
+            if (IsBookFoundById(out Book book))
             {
                 _books.Remove(book);
                 Console.WriteLine($"Книга под номером {book.Id} успешно удалена...");
@@ -197,7 +197,7 @@ namespace ex43
             }
         }
 
-        private bool FindBookById(out Book book)
+        private bool IsBookFoundById(out Book book)
         {
             if (int.TryParse(Console.ReadLine(), out int bookId))
             {
