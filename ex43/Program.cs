@@ -65,7 +65,7 @@ namespace ex43
 
         public void AddBook()
         {
-            int bookId = _books.Count + 1;
+            int bookId = 1;
 
             Console.Write("Введите название книги: ");
             string bookName = Console.ReadLine().ToUpper();
@@ -88,9 +88,11 @@ namespace ex43
 
         public void ShowAllBooks()
         {
+            Console.Clear();
+
             if (_books.Count > 0)
             {
-                foreach (var book in _books)
+                foreach (Book book in _books)
                 {
                     book.ShowInfo();
                 }
@@ -105,7 +107,7 @@ namespace ex43
         {
             ShowAllBooks();
 
-            if (IsBookFoundById(out Book book))
+            if (TryGetBookById(out Book book))
             {
                 _books.Remove(book);
                 Console.WriteLine($"Книга под номером {book.Id} успешно удалена...");
@@ -158,11 +160,11 @@ namespace ex43
             Console.Write("Введите название книги: ");
             string nameOfBook = Console.ReadLine().ToUpper();
 
-            foreach (var book in _books)
+            foreach (Book book in _books)
             {
                 if (nameOfBook == book.Name)
                 {
-                    book.ShowInfo();                    
+                    book.ShowInfo();
                 }
             }
         }
@@ -172,7 +174,7 @@ namespace ex43
             Console.Write("Введите автора: ");
             string nameOfAuthor = Console.ReadLine().ToUpper();
 
-            foreach (var book in _books)
+            foreach (Book book in _books)
             {
                 if (nameOfAuthor == book.Author)
                 {
@@ -187,7 +189,7 @@ namespace ex43
 
             if (int.TryParse(Console.ReadLine(), out int releaseYear))
             {
-                foreach (var book in _books)
+                foreach (Book book in _books)
                 {
                     if (releaseYear == book.Year)
                     {
@@ -197,8 +199,10 @@ namespace ex43
             }
         }
 
-        private bool IsBookFoundById(out Book book)
+        private bool TryGetBookById(out Book book)
         {
+            Console.WriteLine("Введите ID книги: ");
+
             if (int.TryParse(Console.ReadLine(), out int bookId))
             {
                 if (bookId > 0 && bookId - 1 < _books.Count)
@@ -207,7 +211,7 @@ namespace ex43
                     return true;
                 }
                 else
-                {                    
+                {
                     book = null;
                     return false;
                 }
