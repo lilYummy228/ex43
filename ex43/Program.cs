@@ -86,11 +86,11 @@ namespace ex43
 
         public void ShowAllBooks()
         {
-            int bookId = 1;
-            Console.Clear();
-
-            if (_books.Count > 0)
+            if (IsFilled())
             {
+                int bookId = 1;
+                Console.Clear();
+
                 foreach (Book book in _books)
                 {
                     Console.Write($"{bookId}. ");
@@ -98,67 +98,72 @@ namespace ex43
                     bookId++;
                 }
             }
-            else
-            {
-                Console.WriteLine("Библиотека пуста...");
-            }
         }
 
         public void RemoveBook()
         {
-            ShowAllBooks();
+            if (IsFilled())
+            {
+                ShowAllBooks();
 
-            if (TryGetBookById(out Book book))
-            {
-                _books.Remove(book);
-                Console.WriteLine($"Книга '{book.Name}' успешно удалена...");
-            }
-            else
-            {
-                Console.WriteLine("Книга с таким номером отсутствует...");
+                if (TryGetBookById(out Book book))
+                {
+                    _books.Remove(book);
+                    Console.WriteLine($"Книга '{book.Name}' успешно удалена...");
+                }
+                else
+                {
+                    Console.WriteLine("Книга с таким номером отсутствует...");
+                }
             }
         }
 
         public void FindBookByParameter()
         {
-            const string CommandFindByName = "1";
-            const string CommandFindByAuthor = "2";
-            const string CommandFindByReleaseYear = "3";
-            const string CommandGetBack = "4";
-
-            Console.Write($"{CommandFindByName} - найти по названию\n" +
-                $"{CommandFindByAuthor} - найти по автору\n" +
-                $"{CommandFindByReleaseYear} - найти по дате релиза\n" +
-                $"{CommandGetBack} - вернуться назад\n" +
-                $"\nВаш ввод: ");
-
-            switch (Console.ReadLine())
+            if (IsFilled())
             {
-                case CommandFindByName:
-                    FindBookByName();
-                    break;
 
-                case CommandFindByAuthor:
-                    FindBookByAuthor();
-                    break;
+                const string CommandFindByName = "1";
+                const string CommandFindByAuthor = "2";
+                const string CommandFindByReleaseYear = "3";
+                const string CommandGetBack = "4";
 
-                case CommandFindByReleaseYear:
-                    FindBookByReleaseYear();
-                    break;
+                Console.Clear();
+                Console.Write($"Найти книгу по параметру\n" +
+                    $"{CommandFindByName} - найти по названию\n" +
+                    $"{CommandFindByAuthor} - найти по автору\n" +
+                    $"{CommandFindByReleaseYear} - найти по дате релиза\n" +
+                    $"{CommandGetBack} - вернуться назад\n" +
+                    $"\nВаш ввод: ");
 
-                case CommandGetBack:
-                    Console.WriteLine("Возвращаемся назад...");
-                    break;
+                switch (Console.ReadLine())
+                {
+                    case CommandFindByName:
+                        FindBookByName();
+                        break;
 
-                default:
-                    Console.WriteLine("Неккоректный ввод...");
-                    break;
+                    case CommandFindByAuthor:
+                        FindBookByAuthor();
+                        break;
+
+                    case CommandFindByReleaseYear:
+                        FindBookByReleaseYear();
+                        break;
+
+                    case CommandGetBack:
+                        Console.WriteLine("Возвращаемся назад...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Неккоректный ввод...");
+                        break;
+                }
             }
         }
 
         private void FindBookByName()
         {
-            Console.Write("Введите название книги: ");
+            Console.Write("\nВведите название книги: ");
             string nameOfBook = Console.ReadLine().ToUpper();
 
             foreach (Book book in _books)
@@ -172,7 +177,7 @@ namespace ex43
 
         private void FindBookByAuthor()
         {
-            Console.Write("Введите автора: ");
+            Console.Write("\nВведите автора: ");
             string nameOfAuthor = Console.ReadLine().ToUpper();
 
             foreach (Book book in _books)
@@ -186,7 +191,7 @@ namespace ex43
 
         private void FindBookByReleaseYear()
         {
-            Console.Write("Введите год выпуска: ");
+            Console.Write("\nВведите год выпуска: ");
 
             if (int.TryParse(Console.ReadLine(), out int releaseYear))
             {
@@ -202,7 +207,7 @@ namespace ex43
 
         private bool TryGetBookById(out Book book)
         {
-            Console.Write("Введите ID книги: ");
+            Console.Write("\nВведите ID книги: ");
 
             if (int.TryParse(Console.ReadLine(), out int bookId))
             {
@@ -221,6 +226,19 @@ namespace ex43
             {
                 Console.WriteLine("Неккоректный ввод...");
                 book = null;
+                return false;
+            }
+        }
+
+        private bool IsFilled()
+        {
+            if (_books.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Библиотека пуста...");
                 return false;
             }
         }
