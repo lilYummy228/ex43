@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace ex43
 {
@@ -23,7 +22,8 @@ namespace ex43
                     $"{CommandAddBook} - добавить книгу\n" +
                     $"{CommandRemoveBook} - убрать книгу\n" +
                     $"{CommandShowAllBooks} - показать все книги\n" +
-                    $"{CommandFindBookByParameter} - найти книгу по параметру\n\n" +
+                    $"{CommandFindBookByParameter} - найти книгу по параметру\n" +
+                    $"{CommandExit} - выход из программы\n" +
                     $"Ваш ввод: ");
 
                 switch (Console.ReadLine())
@@ -93,7 +93,6 @@ namespace ex43
                 foreach (var book in _books)
                 {
                     book.ShowInfo();
-                    Console.WriteLine();
                 }
             }
             else
@@ -226,15 +225,15 @@ namespace ex43
     {
         public Book(int id, string name, string author, int year)
         {
-            Id = id;
             Name = name;
             Author = author;
+            Id = id;
             Year = year;
         }
 
-        public int Id { get; private set; }
         public string Name { get; private set; }
         public string Author { get; private set; }
+        public int Id { get; private set; }
         public int Year { get; private set; }
 
         public void ShowInfo()
