@@ -65,8 +65,6 @@ namespace ex43
 
         public void AddBook()
         {
-            int bookId = 1;
-
             Console.Write("Введите название книги: ");
             string bookName = Console.ReadLine().ToUpper();
 
@@ -77,7 +75,7 @@ namespace ex43
 
             if (int.TryParse(Console.ReadLine(), out int releaseYear))
             {
-                _books.Add(new Book(bookId, bookName, authorName, releaseYear));
+                _books.Add(new Book(bookName, authorName, releaseYear));
                 Console.WriteLine($"Книга '{bookName}' успешно добавлена...");
             }
             else
@@ -88,13 +86,16 @@ namespace ex43
 
         public void ShowAllBooks()
         {
+            int bookId = 1;
             Console.Clear();
 
             if (_books.Count > 0)
             {
                 foreach (Book book in _books)
                 {
+                    Console.Write($"{bookId}. ");
                     book.ShowInfo();
+                    bookId++;
                 }
             }
             else
@@ -110,7 +111,7 @@ namespace ex43
             if (TryGetBookById(out Book book))
             {
                 _books.Remove(book);
-                Console.WriteLine($"Книга под номером {book.Id} успешно удалена...");
+                Console.WriteLine($"Книга '{book.Name}' успешно удалена...");
             }
             else
             {
@@ -227,22 +228,20 @@ namespace ex43
 
     class Book
     {
-        public Book(int id, string name, string author, int year)
+        public Book(string name, string author, int year)
         {
             Name = name;
             Author = author;
-            Id = id;
             Year = year;
         }
 
         public string Name { get; private set; }
         public string Author { get; private set; }
-        public int Id { get; private set; }
         public int Year { get; private set; }
 
         public void ShowInfo()
         {
-            Console.WriteLine($"{Id}. Название книги: '{Name}'\nАвтор: {Author}\nГод выпуска: {Year} год\n");
+            Console.WriteLine($"Название книги: '{Name}'\nАвтор: {Author}\nГод выпуска: {Year} год\n");
         }
     }
 }
