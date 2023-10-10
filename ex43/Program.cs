@@ -202,7 +202,7 @@ namespace ex43
 
         private bool TryGetBookById(out Book book)
         {
-            Console.WriteLine("Введите ID книги: ");
+            Console.Write("Введите ID книги: ");
 
             if (int.TryParse(Console.ReadLine(), out int bookId))
             {
